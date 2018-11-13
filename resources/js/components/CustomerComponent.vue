@@ -6,7 +6,7 @@
                    <div class="card-header">Customers</div>
 
                    <div class="card-body">
-                       <form class="mb-3">
+                      <!-- <form class="mb-3">
                            <div class="row">
                                <div class="col-md-2">
                                    <strong>Search By : </strong>
@@ -23,7 +23,7 @@
                                    <input type="text" class="form-control" placeholder="Search">
                                </div>
                            </div>
-                       </form>
+                       </form>-->
                        <div class="table-responsive">
                            <table class="table table-hover table-bordered table-striped">
                                <thead>
@@ -38,7 +38,7 @@
                                </thead>
                                <tbody>
                                <tr v-for="(customer, index) in customers" :key="customer.id">
-                                   <th scope="row">{{ customer.id }}</th>
+                                   <th scope="row">{{ index + 1 }}</th>
                                    <td>{{ customer.name}}</td>
                                    <td>{{ customer.email }}</td>
                                    <td>{{ customer.phone }}</td>
@@ -57,6 +57,11 @@
                                </tr>
                                </tbody>
                            </table>
+                           <pagination v-if="pagination.last_page > 1"
+                                       :pagination="pagination"
+                                       :offset="5"
+                                       @paginate="getData()"
+                                        ></pagination>
                        </div>
                    </div>
                </div>
@@ -70,6 +75,9 @@
         data () {
             return {
                 customers: [],
+                pagination:{
+                    current_page: 1,
+                }
             }
         },
         mounted() {
@@ -78,9 +86,10 @@
         methods: {
             getData(){
                 this.$Progress.start()
-                axios.get('/api/customers')
+                axios.get('/api/customers?page='+this.pagination.current_page)
                     .then(response => {
                         this.customers = response.data.data
+                        this.pagination = response.data.meta
                         this.$Progress.finish()
                     })
                     .catch(e => {

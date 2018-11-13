@@ -17,6 +17,7 @@ const VueProgressBarOptions = {
 Vue.use(VueProgressBar, VueProgressBarOptions);
 
 Vue.component('customer-component', require('./components/CustomerComponent.vue'));
+Vue.component('pagination', require('./components/partial/PaginationComponent.vue'));
 
 const app = new Vue({
     el: '#app'
