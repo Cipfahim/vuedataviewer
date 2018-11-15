@@ -20,6 +20,8 @@
         "vue": "^2.5.7"
     },
     "dependencies": {
-        "vue-progressbar": "^0.7.5"
+        "vform": "^1.0.0",
+        "vue-progressbar": "^0.7.5",
+        "vue-snotify": "^3.2.1"
     }
 }
