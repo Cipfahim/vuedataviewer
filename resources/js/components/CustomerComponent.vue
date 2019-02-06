@@ -67,7 +67,11 @@
                       <button type="button" @click="edit(customer)" class="btn btn-primary btn-sm">
                         <i class="fas fa-edit"></i>
                       </button>
-                      <button type="button" class="btn btn-danger btn-sm">
+                      <button
+                        type="button"
+                        @click="destroy(customer)"
+                        class="btn btn-danger btn-sm"
+                      >
                         <i class="fas fa-trash-alt"></i>
                       </button>
                     </td>
@@ -317,6 +321,49 @@ export default {
           this.$Progress.fail();
           console.log(e);
         });
+    },
+    destroy(customer) {
+      this.$snotify.clear();
+      this.$snotify.confirm(
+        "You will not be able to recover this data!",
+        "Are you sure?",
+        {
+          showProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          buttons: [
+            {
+              text: "Yes",
+              action: toast => {
+                this.$snotify.remove(toast.id);
+                this.$Progress.start();
+                axios
+                  .delete("/api/customers/" + customer.id)
+                  .then(response => {
+                    this.getData();
+                    this.$Progress.finish();
+                    this.$snotify.success(
+                      "Customer Successfully Deleted",
+                      "Success"
+                    );
+                  })
+                  .catch(e => {
+                    this.$Progress.fail();
+                    console.log(e);
+                  });
+              },
+              bold: true
+            },
+            {
+              text: "No",
+              action: toast => {
+                this.$snotify.remove(toast.id);
+              },
+              bold: true
+            }
+          ]
+        }
+      );
     }
   }
 };
